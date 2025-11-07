@@ -74,8 +74,11 @@
 
 <script setup>
 import { reactive } from 'vue'
-import axios from 'axios'
+import { router } from '@inertiajs/vue3'
 
+const props = defineProps({
+    family: Object,
+})
 
 const form = reactive({
     family_member_name: '',
@@ -86,11 +89,12 @@ const form = reactive({
 
 
 function submit() {
-    axios.post('/api/suggestions', form)
-        .then(() => {
+    router.post(`/family/${props.family.slug}/suggestions`, form, {
+        onSuccess: () => {
             Object.keys(form).forEach(k => form[k] = '')
-            window.dispatchEvent(new Event('suggestions:created'))
-        })
-        .catch(e => console.error(e))
+            router.reload({ only: ['suggestions'] }) // ✅ reload suggestions only
+        },
+        onError: e => console.error(e)
+    })
 }
 </script>

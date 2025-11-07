@@ -3,25 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNameSuggestionRequest;
+use App\Models\Family;
 use App\Models\NameSuggestion;
 use Illuminate\Http\Request;
 
 class NameSuggestionController extends Controller
 {
-    public function index()
-    {
-        return NameSuggestion::orderBy('created_at', 'desc')->get();
-    }
-
-
-    public function store(StoreNameSuggestionRequest $request)
+    public function store(StoreNameSuggestionRequest $request, Family $family)
     {
         $data = $request->validated();
         $data['submitted_at'] = now();
-        $suggestion = NameSuggestion::create($data);
-
-
-        return response()->json($suggestion, 201);
+        $family->suggestions()->create($data);
+        return redirect()->back()->with('success', 'Suggestion added successfully!');
     }
 
 
@@ -31,23 +24,58 @@ class NameSuggestionController extends Controller
         $type = $request->query('type', 'boy'); // 'boy' or 'girl'
 
 
-        $rows = NameSuggestion::whereNotNull($type.'_name')->get();
+        $rows = NameSuggestion::whereNotNull($type . '_name')->get();
         if ($rows->isEmpty()) {
-            return response()->json(['message' => 'No suggestions found for type '.$type], 404);
+            return response()->json(['message' => 'No suggestions found for type ' . $type], 404);
         }
 
 
         $random = $rows->shuffle()->first();
         return response()->json([
             'suggestion' => $random,
-            'selected_name' => $random->{$type.'_name'},
+            'selected_name' => $random->{$type . '_name'},
+        ]);
+    }
+
+    public function shuffle(Family $family, Request $request)
+    {
+        // Validate the 'type' query parameter
+        $type = $request->query('type', 'boy');
+        if (!in_array($type, ['boy', 'girl'])) {
+            return response()->json(['error' => 'Invalid type parameter'], 422);
+        }
+
+        // Fetch one random suggestion that has the chosen name type filled
+        $suggestion = $family->suggestions()
+            ->whereNotNull("{$type}_name")
+            ->inRandomOrder()
+            ->first();
+
+        // Handle case: no suggestions available for that type
+        if (!$suggestion) {
+            return response()->json([
+                'message' => "No {$type} name suggestions found for this family.",
+                'suggestion' => null,
+                'selected_name' => null,
+                'success' => true,
+            ], 200);
+        }
+
+        // Return the randomly selected suggestion
+        return response()->json([
+            'message' => ucfirst($type) . ' name selected successfully.',
+            'suggestion' => $suggestion,
+            'selected_name' => $suggestion->{"{$type}_name"},
+            'success' => true,
         ]);
     }
 
 
-    public function destroy(NameSuggestion $nameSuggestion)
+
+    public function destroy(Family $family, $id)
     {
-        $nameSuggestion->delete();
+        $suggestion = $family->suggestions()->findOrFail($id);
+        $suggestion->delete();
         return response()->json(['deleted' => true]);
     }
 }

@@ -6,12 +6,14 @@
                 <button
                     @click="pick('boy')"
                     class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg shadow-sm transition"
+                    :disabled="props.suggestions.length === 0"
                 >
                     🎲 Pick Boy Name
                 </button>
                 <button
                     @click="pick('girl')"
                     class="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg shadow-sm transition"
+                    :disabled="props.suggestions.length === 0"
                 >
                     🎲 Pick Girl Name
                 </button>
@@ -19,11 +21,11 @@
         </div>
 
         <ul
-            v-if="suggestions.length"
+            v-if="props.suggestions.length"
             class="divide-y divide-slate-200 border border-slate-100 rounded-xl bg-white shadow-sm"
         >
             <li
-                v-for="s in suggestions"
+                v-for="s in props.suggestions"
                 :key="s.id"
                 class="p-4 flex justify-between items-center hover:bg-sky-50 transition"
             >
@@ -66,36 +68,39 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
+import { router } from '@inertiajs/vue3'
 
+const props = defineProps({
+    suggestions: Array,
+    family: Object
+})
 
-const suggestions = ref([])
 const picked = ref(null)
 
 
-async function load() {
-    const { data } = await axios.get('/api/suggestions')
-    suggestions.value = data
-}
-
-
 async function remove(id) {
-    await axios.delete(`/api/suggestions/${id}`)
-    await load()
+    try {
+        await axios.delete(`/family/${props.family.slug}/${id}`)
+        // Optionally refresh the suggestions list
+        router.reload({ only: ['suggestions'] }) // if you're using Inertia
+        // OR emit an event to reload manually if using local API fetch
+    } catch (e) {
+        alert(e.response?.data?.message ?? 'Sorry, unable to remove.')
+    }
 }
-
 
 async function pick(type) {
     try {
-        const { data } = await axios.get('/api/suggestions/pick', { params: { type } })
-        picked.value = data
+        const { data } = await axios.get(`/family/${props.family.slug}/shuffle`, { params: { type } })
+
+        if(data.success)
+        {
+            picked.value = data
+        }
     } catch (e) {
         alert(e.response?.data?.message ?? 'No suggestions found')
     }
 }
-
-
-onMounted(load)
-window.addEventListener('suggestions:created', load)
 </script>

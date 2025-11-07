@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NameSuggestion extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
 
     protected $fillable = [
@@ -17,10 +16,15 @@ class NameSuggestion extends Model
         'boy_name',
         'girl_name',
         'submitted_at',
+        'family_id',
     ];
 
 
     protected $casts = [
         'submitted_at' => 'datetime',
     ];
+    public function family()
+    {
+        return $this->belongsTo(Family::class);
+    }
 }
