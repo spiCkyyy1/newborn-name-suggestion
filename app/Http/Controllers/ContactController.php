@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class ContactController extends Controller
 {
@@ -26,6 +27,6 @@ class ContactController extends Controller
                 ->subject('New Contact Message');
         });
 
-        return redirect()->back()->with('success', 'Thanks for contacting us!');
+        return Redirect::route('welcome')->with('success', 'Thanks for contacting us!');
     }
 }

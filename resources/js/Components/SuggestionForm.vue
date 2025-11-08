@@ -69,13 +69,18 @@
             </div>
         </div>
 
-        <div class="text-center">
+        <div class="text-center ml-28">
             <button
                 type="submit"
                 :disabled="form.processing"
-                class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl shadow-md transition-all"
+                class="w-full sm:w-auto px-8 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl
+                shadow-md hover:shadow-xl transition-all duration-200
+                   flex items-center justify-center gap-2
+                   disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-md
+                   focus:outline-none focus:ring-4 focus:ring-sky-300 focus:ring-offset-2"
             >
-                💌 Submit Suggestion
+                <PaperAirplaneIcon class="w-5 h-5 -rotate-45 transform" />
+                <span>Submit Suggestion</span>
             </button>
         </div>
         <progress v-if="form.progress" :value="form.progress.percentage" max="100">
@@ -87,7 +92,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/vue3'
-
+import { PaperAirplaneIcon } from '@heroicons/vue/24/solid';
 const props = defineProps({
     family: Object
 })

@@ -22,13 +22,13 @@ class FamilyAdminController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:3',
         ]);
 
         $slug = Str::slug($validated['name']);
         $accessCode = Str::uuid();
 
-        $family = Family::create([
+        Family::create([
             'name' => $validated['name'],
             'slug' => $slug,
             'access_code' => $accessCode,

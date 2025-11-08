@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FamilyAdminController;
 
 Route::get('/', function () {
-    return view('welcome');
+//    return view('welcome');
+    return \Inertia\Inertia::render('Welcome');
 })->name('welcome');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminAuth
@@ -17,7 +18,13 @@ class AdminAuth
     {
         $queryKey  = $request->query('key');
         $headerKey = $request->header('x-admin-key');
-        if ($queryKey !== env('ADMIN_KEY') && $headerKey !== env('ADMIN_KEY')) {
+        $hash      = env('ADMIN_KEY_HASH');
+
+
+        $isQueryValid  = $queryKey && Hash::check($queryKey, $hash);
+        $isHeaderValid = $headerKey && Hash::check($headerKey, $hash);
+
+        if (! $isQueryValid && ! $isHeaderValid) {
             abort(403, 'Unauthorized');
         }
 

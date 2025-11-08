@@ -54,8 +54,23 @@
                     :disabled="form.processing"
                     class="w-full bg-sky-600 hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3 shadow-md transition flex items-center justify-center gap-2"
                 >
-                    📬 Send Message
+                    <span class="w-5 h-5 flex items-center justify-center">
+                        <EnvelopeIcon class="w-full h-full" />
+                    </span>
+                     Send Message
                 </button>
+
+
+                <Link
+                    href="/"
+                    type="button"
+                    class="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl py-3 shadow-md transition flex items-center justify-center gap-2"
+                >
+                    <span class="w-5 h-5 flex items-center justify-center">
+                        <XCircleIcon class="w-full h-full" />
+                    </span>
+                    Cancel
+                </Link>
 
                 <!-- Progress Bar -->
                 <div v-if="form.progress" class="mt-2 h-2 w-full bg-slate-200 rounded-full overflow-hidden">
@@ -71,8 +86,9 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useForm, usePage } from '@inertiajs/vue3'
+import { useForm, usePage, Link } from '@inertiajs/vue3'
 import AlertMessage from "../Components/AlertMessage.vue";
+import {  XCircleIcon, EnvelopeIcon } from "@heroicons/vue/24/solid";
 
 const flash = computed(() => usePage().props?.flash || {})
 const form = useForm({
