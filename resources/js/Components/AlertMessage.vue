@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
-
+import { ref, watchEffect, watch } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 const props = defineProps({
     type: {
         type: String,
@@ -55,8 +55,17 @@ const props = defineProps({
     },
 })
 
-const visible = ref(true)
 
+const visible = ref(true)
+const page = usePage()
+// Re-trigger visibility whenever the page flash updates
+watch(
+    () => page.props.flash,
+    () => {
+        visible.value = true
+    },
+    { deep: true }
+)
 // Automatically hide after duration
 watchEffect(() => {
     if (visible.value && props.duration > 0) {

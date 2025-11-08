@@ -23,9 +23,9 @@ class StoreNameSuggestionRequest extends FormRequest
     {
         return [
             'family_member_name' => 'required|string|max:255',
-            'relation' => 'nullable|string|max:100',
-            'boy_name' => 'nullable|string|max:255',
-            'girl_name' => 'nullable|string|max:255',
+            'relation' => 'required|string|max:100',
+            'boy_name' => 'required|string|max:255',
+            'girl_name' => 'required|string|max:255',
         ];
     }
 }

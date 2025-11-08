@@ -80,12 +80,20 @@ const props = defineProps({
 const picked = ref(null)
 
 
-async function remove(id) {
+function remove(id) {
     try {
-        await axios.delete(`/family/${props.family.slug}/${id}`)
-        // Optionally refresh the suggestions list
-        router.reload({ only: ['suggestions'] }) // if you're using Inertia
-        // OR emit an event to reload manually if using local API fetch
+        router.delete(`/family/${props.family.slug}/${id}`, {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                router.visit(window.location.href, {
+                    only: ['suggestions'],
+                    preserveScroll: true,
+                    preserveState: true,
+                })
+            },
+            onError: e => console.error(e),
+        })
     } catch (e) {
         alert(e.response?.data?.message ?? 'Sorry, unable to remove.')
     }

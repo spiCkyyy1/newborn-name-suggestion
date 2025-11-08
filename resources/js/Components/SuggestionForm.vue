@@ -11,11 +11,14 @@
                 <input
                     id="family_member_name"
                     v-model="form.family_member_name"
+                    name="family_member_name"
                     type="text"
                     placeholder="e.g. Alice"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                     required
                 />
+
+                <p v-if="form.errors.family_member_name" class="text-sm text-red-600 mt-1">{{ form.errors.family_member_name.join(',') }}</p>
             </div>
 
             <div>
@@ -26,9 +29,11 @@
                     id="relation"
                     v-model="form.relation"
                     type="text"
+                    name="relation"
                     placeholder="e.g. Aunt, Uncle"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
+                <p v-if="form.errors.relation" class="text-sm text-red-600 mt-1">{{ form.errors.relation.join(',') }}</p>
             </div>
         </div>
 
@@ -41,9 +46,11 @@
                     id="boy_name"
                     v-model="form.boy_name"
                     type="text"
+                    name="boy_name"
                     placeholder="e.g. Oliver"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
+                <p v-if="form.errors.boy_name" class="text-sm text-red-600 mt-1">{{ form.errors.boy_name.join(',') }}</p>
             </div>
 
             <div>
@@ -53,48 +60,49 @@
                 <input
                     id="girl_name"
                     v-model="form.girl_name"
+                    name="girl_name"
                     type="text"
                     placeholder="e.g. Olivia"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
+                <p v-if="form.errors.girl_name" class="text-sm text-red-600 mt-1">{{ form.errors.girl_name.join(',') }}</p>
             </div>
         </div>
 
         <div class="text-center">
             <button
                 type="submit"
+                :disabled="form.processing"
                 class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl shadow-md transition-all"
             >
                 💌 Submit Suggestion
             </button>
         </div>
+        <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+            {{ form.progress.percentage }}%
+        </progress>
     </form>
 </template>
 
 
 <script setup>
-import { reactive } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
-    family: Object,
+    family: Object
 })
 
-const form = reactive({
+const form = useForm({
     family_member_name: '',
     relation: '',
     boy_name: '',
     girl_name: ''
 })
 
-
 function submit() {
-    router.post(`/family/${props.family.slug}/suggestions`, form, {
-        onSuccess: () => {
-            Object.keys(form).forEach(k => form[k] = '')
-            router.reload({ only: ['suggestions'] }) // ✅ reload suggestions only
-        },
-        onError: e => console.error(e)
+    form.post(`/family/${props.family.slug}/suggestions`, {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
     })
 }
 </script>

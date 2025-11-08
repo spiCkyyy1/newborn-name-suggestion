@@ -6,9 +6,17 @@ use App\Http\Requests\StoreNameSuggestionRequest;
 use App\Models\Family;
 use App\Models\NameSuggestion;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class NameSuggestionController extends Controller
 {
+    public function showFamily(Family $family)
+    {
+        return Inertia::render('Home', [
+            'family' => $family,
+            'suggestions' => $family->suggestions()->latest()->get(),
+        ]);
+    }
     public function store(StoreNameSuggestionRequest $request, Family $family)
     {
         $data = $request->validated();
@@ -16,7 +24,6 @@ class NameSuggestionController extends Controller
         $family->suggestions()->create($data);
         return redirect()->back()->with('success', 'Suggestion added successfully!');
     }
-
 
     public function pickRandom(Request $request)
     {
@@ -70,12 +77,10 @@ class NameSuggestionController extends Controller
         ]);
     }
 
-
-
     public function destroy(Family $family, $id)
     {
         $suggestion = $family->suggestions()->findOrFail($id);
         $suggestion->delete();
-        return response()->json(['deleted' => true]);
+        return redirect()->back()->with('success', 'Suggestion deleted successfully!');
     }
 }

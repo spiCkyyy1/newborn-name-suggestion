@@ -14,11 +14,13 @@
             <!-- success/error messages -->
             <AlertMessage
                 v-if="flash.success"
+                :key="Date.now() + flash.success"
                 type="success"
                 :title="flash.success"
             />
             <AlertMessage
                 v-if="flash.error"
+                :key="Date.now() + flash.success"
                 type="error"
                 :title="flash.error"
             />
@@ -40,6 +42,5 @@ import SuggestionForm from "../Components/SuggestionForm.vue";
 import SuggestionList from '../Components/SuggestionList.vue'
 import { HeartIcon, UserCircleIcon } from '@heroicons/vue/24/solid'
 defineProps({ family: Object, suggestions: Array })
-const { props } = usePage()
-const flash = computed(() => props.flash || {})
+const flash = computed(() => usePage().props?.flash || {})
 </script>

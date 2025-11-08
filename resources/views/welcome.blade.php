@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Family Baby Name Hub</title>
 
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="antialiased bg-gradient-to-b from-sky-50 to-white min-h-screen flex items-center justify-center text-slate-700">
 
@@ -24,7 +24,7 @@
 
     <div class="mt-10">
         <a
-            href="mailto:admin@example.com"
+            href="{{ route('contact.show') }}"
             class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow-md transition-all duration-300"
         >
             ✉️ Contact Admin
