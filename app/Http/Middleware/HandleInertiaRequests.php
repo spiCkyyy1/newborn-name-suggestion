@@ -14,7 +14,7 @@ class HandleInertiaRequests extends Middleware
             'appName' => config('app.name'),
             'flash' => [
                 'success' => fn () => $request->session()->get('success', null),
-                'error'   => fn () => $request->session()->get('error', null),
+                'error' => fn () => $request->session()->get('error', null),
             ],
             'errors' => fn () => $request->session()->get('errors')
                 ? $request->session()->get('errors')->getBag('default')->getMessages()

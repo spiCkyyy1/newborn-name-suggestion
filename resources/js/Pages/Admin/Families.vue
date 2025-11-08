@@ -1,17 +1,26 @@
 <template>
     <main class="max-w-3xl mx-auto p-4 sm:p-8 bg-sky-50 min-h-screen">
-        <h1 class="text-4xl font-extrabold mb-10 text-center text-sky-800 flex items-center justify-center gap-3">
+        <h1
+            class="text-4xl font-extrabold mb-10 text-center text-sky-800 flex items-center justify-center gap-3"
+        >
             <HomeModernIcon class="w-8 h-8 text-sky-600" />
             Family Manager
         </h1>
 
-        <form @submit.prevent="createFamily" class="bg-white p-8 rounded-3xl shadow-xl border border-sky-100 mb-10 space-y-6">
-            <h2 class="text-xl font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">
+        <form
+            @submit.prevent="createFamily"
+            class="bg-white p-8 rounded-3xl shadow-xl border border-sky-100 mb-10 space-y-6"
+        >
+            <h2
+                class="text-xl font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2"
+            >
                 Create New Family
             </h2>
 
             <label class="block">
-                <span class="text-slate-600 font-semibold mb-2 block">Family Name</span>
+                <span class="text-slate-600 font-semibold mb-2 block"
+                    >Family Name</span
+                >
                 <input
                     v-model="form.name"
                     type="text"
@@ -21,13 +30,14 @@
                 />
             </label>
 
-            <p v-if="form.errors.name" class="text-sm text-red-600 mt-1">{{ form.errors.name.join(',') }}</p>
+            <p v-if="form.errors.name" class="text-sm text-red-600 mt-1">
+                {{ form.errors.name.join(",") }}
+            </p>
 
             <button
                 type="submit"
                 :disabled="form.processing"
-                class="w-full px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold shadow-md transition-all duration-200
-                       flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold shadow-md transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <LinkIcon class="w-5 h-5 -rotate-45 transform" />
                 Create Family Link
@@ -35,7 +45,9 @@
         </form>
 
         <div class="space-y-4">
-            <h2 class="text-xl font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2">
+            <h2
+                class="text-xl font-bold text-slate-700 mb-4 border-b border-slate-100 pb-2"
+            >
                 Existing Families
             </h2>
 
@@ -51,8 +63,12 @@
                     <div class="flex items-center gap-3">
                         <UserGroupIcon class="w-6 h-6 text-sky-500" />
                         <div>
-                            <p class="font-bold text-slate-800">{{ family.name }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5 italic">Slug: {{ family.slug }}</p>
+                            <p class="font-bold text-slate-800">
+                                {{ family.name }}
+                            </p>
+                            <p class="text-xs text-slate-500 mt-0.5 italic">
+                                Slug: {{ family.slug }}
+                            </p>
                         </div>
                     </div>
 
@@ -74,20 +90,24 @@
 </template>
 
 <script setup>
-import {  useForm } from '@inertiajs/vue3'
-import { HomeModernIcon, UserGroupIcon, LinkIcon } from '@heroicons/vue/24/solid';
+import { useForm } from "@inertiajs/vue3";
+import {
+    HomeModernIcon,
+    UserGroupIcon,
+    LinkIcon,
+} from "@heroicons/vue/24/solid";
 defineProps({
-    families: Array
-})
+    families: Array,
+});
 
-const form = useForm({ name: '' })
+const form = useForm({ name: "" });
 
 function createFamily() {
-    form.post('/admin/families', {
+    form.post("/admin/families", {
         headers: {
-            'x-admin-key': import.meta.env.VITE_ADMIN_KEY_HASH
+            "x-admin-key": import.meta.env.VITE_ADMIN_KEY_HASH,
         },
         onSuccess: () => form.reset(),
-    })
+    });
 }
 </script>

@@ -9,7 +9,6 @@ class NameSuggestion extends Model
 {
     use SoftDeletes;
 
-
     protected $fillable = [
         'family_member_name',
         'relation',
@@ -19,10 +18,10 @@ class NameSuggestion extends Model
         'family_id',
     ];
 
-
     protected $casts = [
         'submitted_at' => 'datetime',
     ];
+
     public function family()
     {
         return $this->belongsTo(Family::class);

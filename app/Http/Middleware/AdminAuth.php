@@ -16,12 +16,11 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $queryKey  = $request->query('key');
+        $queryKey = $request->query('key');
         $headerKey = $request->header('x-admin-key');
-        $hash      = env('ADMIN_KEY_HASH');
+        $hash = env('ADMIN_KEY_HASH');
 
-
-        $isQueryValid  = $queryKey && Hash::check($queryKey, $hash);
+        $isQueryValid = $queryKey && Hash::check($queryKey, $hash);
         $isHeaderValid = $headerKey && Hash::check($headerKey, $hash);
 
         if (! $isQueryValid && ! $isHeaderValid) {

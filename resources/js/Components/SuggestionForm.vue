@@ -5,7 +5,10 @@
     >
         <div class="grid md:grid-cols-2 gap-6">
             <div>
-                <label class="block text-slate-600 font-semibold mb-1" for="family_member_name">
+                <label
+                    class="block text-slate-600 font-semibold mb-1"
+                    for="family_member_name"
+                >
                     Your Name
                 </label>
                 <input
@@ -18,11 +21,19 @@
                     required
                 />
 
-                <p v-if="form.errors.family_member_name" class="text-sm text-red-600 mt-1">{{ form.errors.family_member_name.join(',') }}</p>
+                <p
+                    v-if="form.errors.family_member_name"
+                    class="text-sm text-red-600 mt-1"
+                >
+                    {{ form.errors.family_member_name.join(",") }}
+                </p>
             </div>
 
             <div>
-                <label class="block text-slate-600 font-semibold mb-1" for="relation">
+                <label
+                    class="block text-slate-600 font-semibold mb-1"
+                    for="relation"
+                >
                     Relation
                 </label>
                 <input
@@ -33,13 +44,21 @@
                     placeholder="e.g. Aunt, Uncle"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
-                <p v-if="form.errors.relation" class="text-sm text-red-600 mt-1">{{ form.errors.relation.join(',') }}</p>
+                <p
+                    v-if="form.errors.relation"
+                    class="text-sm text-red-600 mt-1"
+                >
+                    {{ form.errors.relation.join(",") }}
+                </p>
             </div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-6">
             <div>
-                <label class="block text-slate-600 font-semibold mb-1" for="boy_name">
+                <label
+                    class="block text-slate-600 font-semibold mb-1"
+                    for="boy_name"
+                >
                     Baby Boy Name
                 </label>
                 <input
@@ -50,11 +69,19 @@
                     placeholder="e.g. Oliver"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
-                <p v-if="form.errors.boy_name" class="text-sm text-red-600 mt-1">{{ form.errors.boy_name.join(',') }}</p>
+                <p
+                    v-if="form.errors.boy_name"
+                    class="text-sm text-red-600 mt-1"
+                >
+                    {{ form.errors.boy_name.join(",") }}
+                </p>
             </div>
 
             <div>
-                <label class="block text-slate-600 font-semibold mb-1" for="girl_name">
+                <label
+                    class="block text-slate-600 font-semibold mb-1"
+                    for="girl_name"
+                >
                     Baby Girl Name
                 </label>
                 <input
@@ -65,7 +92,12 @@
                     placeholder="e.g. Olivia"
                     class="w-full rounded-xl border-slate-300 focus:ring-2 focus:ring-sky-400 focus:outline-none p-3 text-slate-700"
                 />
-                <p v-if="form.errors.girl_name" class="text-sm text-red-600 mt-1">{{ form.errors.girl_name.join(',') }}</p>
+                <p
+                    v-if="form.errors.girl_name"
+                    class="text-sm text-red-600 mt-1"
+                >
+                    {{ form.errors.girl_name.join(",") }}
+                </p>
             </div>
         </div>
 
@@ -73,41 +105,40 @@
             <button
                 type="submit"
                 :disabled="form.processing"
-                class="w-full sm:w-auto px-8 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl
-                shadow-md hover:shadow-xl transition-all duration-200
-                   flex items-center justify-center gap-2
-                   disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-md
-                   focus:outline-none focus:ring-4 focus:ring-sky-300 focus:ring-offset-2"
+                class="w-full sm:w-auto px-8 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-md hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-md focus:outline-none focus:ring-4 focus:ring-sky-300 focus:ring-offset-2"
             >
                 <PaperAirplaneIcon class="w-5 h-5 -rotate-45 transform" />
                 <span>Submit Suggestion</span>
             </button>
         </div>
-        <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+        <progress
+            v-if="form.progress"
+            :value="form.progress.percentage"
+            max="100"
+        >
             {{ form.progress.percentage }}%
         </progress>
     </form>
 </template>
 
-
 <script setup>
-import { useForm } from '@inertiajs/vue3'
-import { PaperAirplaneIcon } from '@heroicons/vue/24/solid';
+import { useForm } from "@inertiajs/vue3";
+import { PaperAirplaneIcon } from "@heroicons/vue/24/solid";
 const props = defineProps({
-    family: Object
-})
+    family: Object,
+});
 
 const form = useForm({
-    family_member_name: '',
-    relation: '',
-    boy_name: '',
-    girl_name: ''
-})
+    family_member_name: "",
+    relation: "",
+    boy_name: "",
+    girl_name: "",
+});
 
 function submit() {
     form.post(`/family/${props.family.slug}/suggestions`, {
         preserveScroll: true,
         onSuccess: () => form.reset(),
-    })
+    });
 }
 </script>

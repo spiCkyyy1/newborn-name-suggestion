@@ -17,11 +17,13 @@ class NameSuggestionController extends Controller
             'suggestions' => $family->suggestions()->latest()->get(),
         ]);
     }
+
     public function store(StoreNameSuggestionRequest $request, Family $family)
     {
         $data = $request->validated();
         $data['submitted_at'] = now();
         $family->suggestions()->create($data);
+
         return redirect()->back()->with('success', 'Suggestion added successfully!');
     }
 
@@ -30,17 +32,16 @@ class NameSuggestionController extends Controller
         // Return a shuffled single record with chosen name (boy/girl) depending on type
         $type = $request->query('type', 'boy'); // 'boy' or 'girl'
 
-
-        $rows = NameSuggestion::whereNotNull($type . '_name')->get();
+        $rows = NameSuggestion::whereNotNull($type.'_name')->get();
         if ($rows->isEmpty()) {
-            return response()->json(['message' => 'No suggestions found for type ' . $type], 404);
+            return response()->json(['message' => 'No suggestions found for type '.$type], 404);
         }
 
-
         $random = $rows->shuffle()->first();
+
         return response()->json([
             'suggestion' => $random,
-            'selected_name' => $random->{$type . '_name'},
+            'selected_name' => $random->{$type.'_name'},
         ]);
     }
 
@@ -48,7 +49,7 @@ class NameSuggestionController extends Controller
     {
         // Validate the 'type' query parameter
         $type = $request->query('type', 'boy');
-        if (!in_array($type, ['boy', 'girl'])) {
+        if (! in_array($type, ['boy', 'girl'])) {
             return response()->json(['error' => 'Invalid type parameter'], 422);
         }
 
@@ -59,7 +60,7 @@ class NameSuggestionController extends Controller
             ->first();
 
         // Handle case: no suggestions available for that type
-        if (!$suggestion) {
+        if (! $suggestion) {
             return response()->json([
                 'message' => "No {$type} name suggestions found for this family.",
                 'suggestion' => null,
@@ -70,7 +71,7 @@ class NameSuggestionController extends Controller
 
         // Return the randomly selected suggestion
         return response()->json([
-            'message' => ucfirst($type) . ' name selected successfully.',
+            'message' => ucfirst($type).' name selected successfully.',
             'suggestion' => $suggestion,
             'selected_name' => $suggestion->{"{$type}_name"},
             'success' => true,
@@ -81,6 +82,7 @@ class NameSuggestionController extends Controller
     {
         $suggestion = $family->suggestions()->findOrFail($id);
         $suggestion->delete();
+
         return redirect()->back()->with('success', 'Suggestion deleted successfully!');
     }
 }

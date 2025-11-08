@@ -34,6 +34,6 @@ class FamilyAdminController extends Controller
             'access_code' => $accessCode,
         ]);
 
-        return back()->with('success', "Family created! Share this link: " . url('/family/' . $slug));
+        return back()->with('success', 'Family created! Share this link: '.url('/family/'.$slug));
     }
 }
