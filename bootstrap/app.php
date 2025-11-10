@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'adminAuth' => \App\Http\Middleware\AdminAuth::class,
+            'adminLogin' => \App\Http\Middleware\AdminLogin::class,
         ]);
         $middleware->append(\App\Http\Middleware\HandleInertiaRequests::class);
     })

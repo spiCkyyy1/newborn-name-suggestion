@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\FamilyAdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NameSuggestionController;
@@ -18,7 +19,15 @@ Route::post('/family/{family:slug}/suggestions', [NameSuggestionController::clas
 Route::get('/family/{family:slug}/shuffle', [NameSuggestionController::class, 'shuffle'])->name('family.suggestions.shuffle');
 Route::delete('/family/{family:slug}/{id}', [NameSuggestionController::class, 'destroy']);
 
+// Admin auth routes
+Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+Route::middleware('adminLogin')->group(function () {
+    Route::get('/admin/families', [FamilyAdminController::class, 'index'])->name('admin.dashboard');
+});
+
 Route::middleware('adminAuth')->group(function () {
-    Route::get('/admin/families', [FamilyAdminController::class, 'index']);
-    Route::post('/admin/families', [FamilyAdminController::class, 'store']);
+    Route::post('/admin/families', [FamilyAdminController::class, 'store'])->name('admin.family.store');
 });

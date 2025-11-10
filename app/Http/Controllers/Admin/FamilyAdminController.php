@@ -16,13 +16,15 @@ class FamilyAdminController extends Controller
 
         return Inertia::render('Admin/Families', [
             'families' => $families,
+            'logoutUrl' => route('admin.logout'),
+            'addFamilyUrl' => route('admin.family.store'),
         ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|min:3',
+            'name' => 'required|string|max:255|min:3|unique:families',
         ]);
 
         $slug = Str::slug($validated['name']);

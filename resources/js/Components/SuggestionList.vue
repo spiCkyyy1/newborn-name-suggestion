@@ -66,12 +66,12 @@
                     </div>
                 </div>
 
-                <button
-                    @click="remove(s.id)"
-                    class="text-slate-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition duration-200 p-2 rounded-full hover:bg-red-50"
-                >
-                    <XMarkIcon class="w-5 h-5" />
-                </button>
+                <!--                <button-->
+                <!--                    @click="remove(s.id)"-->
+                <!--                    class="text-slate-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition duration-200 p-2 rounded-full hover:bg-red-50"-->
+                <!--                >-->
+                <!--                    <XMarkIcon class="w-5 h-5" />-->
+                <!--                </button>-->
             </li>
         </ul>
 
@@ -144,7 +144,7 @@ function remove(id) {
             onError: (e) => console.error(e),
         });
     } catch (e) {
-        alert(e.response?.data?.message ?? "Sorry, unable to remove.");
+        console.log(e.response?.data?.message ?? "Sorry, unable to remove.");
     }
 }
 
@@ -159,7 +159,7 @@ async function pick(type) {
             picked.value = data;
         }
     } catch (e) {
-        alert(e.response?.data?.message ?? "No suggestions found");
+        console.log(e.response?.data?.message ?? "No suggestions found");
     }
 }
 </script>

@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminAuth
+class AdminLogin
 {
     /**
      * Handle an incoming request.
@@ -16,13 +15,8 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $headerKey = $request->header('x-admin-key');
-        $hash = env('ADMIN_KEY_HASH');
-
-        $isHeaderValid = $headerKey && Hash::check($headerKey, $hash);
-
-        if (! $isHeaderValid) {
-            abort(403, 'Unauthorized');
+        if (! session('is_admin')) {
+            return redirect()->route('admin.login');
         }
 
         return $next($request);

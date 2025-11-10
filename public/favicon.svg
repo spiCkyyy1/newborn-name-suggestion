@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0ea5e9">
+  <!-- Outer circle background (Soft Sky Blue) -->
+  <circle cx="12" cy="12" r="10" fill="#e0f2fe"/>
+  
+  <!-- Rattle Head (Pink/Red - Represents the new baby) -->
+  <circle cx="12" cy="8" r="4" fill="#f472b6"/>
+  
+  <!-- Rattle Handle (Sky Blue - Represents the family/structure) -->
+  <rect x="10.5" y="10" width="3" height="10" rx="1.5" fill="#0ea5e9"/>
+  
+  <!-- Sparkle/Star (White - Represents the suggestion/idea) -->
+  <path fill="#ffffff" d="M12 4.25l1.64 3.32 3.66.53-2.65 2.58.63 3.65L12 12.37l-3.3 1.73.63-3.65-2.65-2.58 3.66-.53L12 4.25z"/>
+</svg>
